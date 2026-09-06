@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake Legacy</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=3" />
   </head>
   <body>
     <div class="app-shell">
@@ -38,12 +38,6 @@
             </div>
           </div>
 
-          <div class="controls">
-            <button id="startBtn" class="primary-button" type="button">Gioca</button>
-            <button id="pauseBtn" class="secondary-button" type="button">Pausa</button>
-            <button id="resetBtn" class="ghost-button" type="button">Reset salvataggio</button>
-          </div>
-
           <div class="leaderboard">
             <h2>Classifica</h2>
             <ol id="leaderboardList"></ol>
@@ -60,6 +54,12 @@
 
           <div id="gameBoard" class="game-board" aria-label="Campo di gioco Snake"></div>
 
+          <div class="controls board-controls">
+            <button id="startBtn" class="primary-button" type="button">Gioca</button>
+            <button id="pauseBtn" class="secondary-button" type="button">Pausa</button>
+            <button id="resetBtn" class="ghost-button" type="button">Reset salvataggio</button>
+          </div>
+
           <div class="touch-controls" aria-label="Controlli touch">
             <button type="button" data-direction="up">↑</button>
             <div class="touch-middle-row">
@@ -72,6 +72,6 @@
       </main>
     </div>
 
-    <script src="game.js"></script>
+    <script src="game.js?v=3"></script>
   </body>
 </html>

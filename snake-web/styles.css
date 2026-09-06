@@ -138,6 +138,10 @@ h1 {
   margin-bottom: 20px;
 }
 
+.board-controls {
+  margin-top: 12px;
+}
+
 .primary-button, .secondary-button, .ghost-button, .small-button {
   border: 0;
   border-radius: 10px;
@@ -303,14 +307,44 @@ h1 {
 
 @media (max-width: 820px) {
   body {
-    padding: 14px;
+    padding: 8px;
   }
 
   .game-layout {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .board-panel {
+    order: 1;
+    padding: 10px 10px 8px;
+  }
+
+  .sidebar {
+    order: 2;
+    padding: 14px;
   }
 
   .game-board {
-    width: min(90vw, 440px);
+    width: min(92vw, 440px);
+  }
+
+  .board-header {
+    margin-bottom: 8px;
+  }
+
+  .touch-controls {
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .touch-middle-row {
+    gap: 8px;
+  }
+
+  .touch-controls button {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
   }
 }

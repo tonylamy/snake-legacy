@@ -463,7 +463,7 @@ function playMusicNote() {
 
   oscillator.type = 'square';
   oscillator.frequency.value = musicNotes[musicStep % musicNotes.length];
-  gain.gain.setValueAtTime(0.018, now);
+  gain.gain.setValueAtTime(0.045, now);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
   oscillator.connect(gain);
   gain.connect(ctx.destination);
