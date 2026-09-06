@@ -20,7 +20,10 @@
         <aside class="panel sidebar">
           <div class="player-box">
             <label for="playerName">Nome giocatore</label>
-            <input id="playerName" type="text" maxlength="12" value="Player" placeholder="Inserisci il tuo nome" />
+            <div class="name-entry">
+              <input id="playerName" type="text" maxlength="12" placeholder="Inserisci il tuo nome" />
+              <button id="confirmNameBtn" class="confirm-name-button" type="button" aria-label="Conferma nome" title="Conferma nome">✓</button>
+            </div>
           </div>
 
           <div class="stats-grid">
@@ -35,6 +38,10 @@
             <div class="stat">
               <span>Best</span>
               <strong id="bestValue">0</strong>
+            </div>
+            <div class="stat">
+              <span>Vite</span>
+              <strong id="livesValue">3</strong>
             </div>
           </div>
 
@@ -55,9 +62,8 @@
           <div id="gameBoard" class="game-board" aria-label="Campo di gioco Snake"></div>
 
           <div class="controls board-controls">
-            <button id="startBtn" class="primary-button" type="button">Gioca</button>
+            <button id="startBtn" class="primary-button" type="button" disabled>Gioca</button>
             <button id="pauseBtn" class="secondary-button" type="button">Pausa</button>
-            <button id="resetBtn" class="ghost-button" type="button">Reset salvataggio</button>
           </div>
 
           <div class="touch-controls" aria-label="Controlli touch">
@@ -72,6 +78,6 @@
       </main>
     </div>
 
-    <script src="game.js?v=9"></script>
+    <script src="game.js?v=12"></script>
   </body>
 </html>

@@ -88,6 +88,11 @@ h1 {
   margin-bottom: 18px;
 }
 
+.name-entry {
+  display: flex;
+  gap: 8px;
+}
+
 .player-box label {
   color: var(--muted);
   font-size: 0.72rem;
@@ -96,7 +101,8 @@ h1 {
 }
 
 .player-box input {
-  width: 100%;
+  min-width: 0;
+  flex: 1;
   border: 1px solid rgba(204, 255, 220, 0.18);
   background: rgba(255, 255, 255, 0.03);
   color: var(--text);
@@ -104,9 +110,24 @@ h1 {
   padding: 12px 14px;
 }
 
+.confirm-name-button {
+  width: 48px;
+  border: 1px solid rgba(126, 247, 176, 0.25);
+  border-radius: 10px;
+  background: rgba(126, 247, 176, 0.08);
+  color: var(--muted);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.confirm-name-button.confirmed {
+  background: var(--accent);
+  color: #072e18;
+}
+
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 22px;
 }
@@ -152,6 +173,12 @@ h1 {
 
 .primary-button:hover, .secondary-button:hover, .ghost-button:hover, .small-button:hover {
   transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
 }
 
 .primary-button {

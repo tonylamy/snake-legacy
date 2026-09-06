@@ -46,6 +46,8 @@ const gameState = {
   level: 1,
   score: 0,
   bestScore: 0,
+  lives: 3,
+  nameConfirmed: false,
   running: false,
   paused: false,
   gameOver: false,
@@ -59,15 +61,16 @@ const gameState = {
 
 const boardEl = document.getElementById('gameBoard');
 const playerNameEl = document.getElementById('playerName');
+const confirmNameBtn = document.getElementById('confirmNameBtn');
 const levelValueEl = document.getElementById('levelValue');
 const scoreValueEl = document.getElementById('scoreValue');
 const bestValueEl = document.getElementById('bestValue');
+const livesValueEl = document.getElementById('livesValue');
 const levelNameEl = document.getElementById('levelName');
 const statusBadgeEl = document.getElementById('statusBadge');
 const leaderboardListEl = document.getElementById('leaderboardList');
 const startBtn = document.getElementById('startBtn');
 const pauseBtn = document.getElementById('pauseBtn');
-const resetBtn = document.getElementById('resetBtn');
 const audioToggleBtn = document.getElementById('audioToggle');
 let pointerStart = null;
 let audioContext = null;
@@ -99,12 +102,13 @@ function saveProgress() {
     level: gameState.level,
     score: gameState.score,
     bestScore: gameState.bestScore,
+    lives: gameState.lives,
     direction: gameState.direction,
     nextDirection: gameState.nextDirection,
     snake: gameState.snake,
     food: gameState.food,
     walls: gameState.walls,
-    playerName: playerNameEl.value.trim() || DEFAULT_NAME,
+    playerName: playerNameEl.value.trim(),
     audioEnabled: gameState.audioEnabled
   };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(save));
@@ -121,13 +125,16 @@ function loadProgress() {
     gameState.level = save.level || 1;
     gameState.score = save.score || 0;
     gameState.bestScore = save.bestScore || 0;
+    gameState.lives = Number.isInteger(save.lives) && save.lives > 0 ? Math.min(3, save.lives) : 3;
     gameState.direction = save.direction || { x: 1, y: 0 };
     gameState.nextDirection = save.nextDirection || { ...gameState.direction };
     gameState.snake = save.snake.map(segment => ({ ...segment }));
     gameState.food = save.food ? { ...save.food } : null;
     gameState.walls = Array.isArray(save.walls) ? save.walls.map(wall => ({ ...wall })) : [];
     gameState.audioEnabled = save.audioEnabled !== false;
+    gameState.nameConfirmed = false;
     playerNameEl.value = save.playerName || DEFAULT_NAME;
+    updateNameConfirmation();
     updateAudioButton();
     return true;
   } catch (error) {
@@ -172,6 +179,7 @@ function updateStats() {
   levelValueEl.textContent = String(gameState.level);
   scoreValueEl.textContent = String(gameState.score);
   bestValueEl.textContent = String(gameState.bestScore);
+  livesValueEl.textContent = String(gameState.lives);
 
   const preset = levelPresets[(gameState.level - 1) % levelPresets.length];
   levelNameEl.textContent = `Livello ${gameState.level} · ${preset.name}`;
@@ -296,7 +304,7 @@ function advanceGame() {
   const bodyHit = gameState.snake.some(segment => segment.x === nextHead.x && segment.y === nextHead.y);
 
   if (outOfBounds || wallHit || bodyHit) {
-    finishGame();
+    loseLife();
     return;
   }
 
@@ -347,6 +355,23 @@ function finishGame() {
   setStatus('Game Over', 'danger');
   playTone('gameover');
   render();
+}
+
+function loseLife() {
+  gameState.lives -= 1;
+  if (gameState.lives <= 0) {
+    finishGame();
+    return;
+  }
+
+  stopMusic();
+  playTone('gameover');
+  createInitialState(gameState.level, true);
+  gameState.running = true;
+  gameState.lastTime = performance.now();
+  setStatus(`Vita persa · ${gameState.lives} rimaste`, 'warn');
+  startMusic();
+  saveProgress();
 }
 
 function resetGame() {
@@ -401,10 +426,17 @@ function render() {
 }
 
 function startGame() {
-  const name = playerNameEl.value.trim() || DEFAULT_NAME;
+  const name = playerNameEl.value.trim();
+  if (!name || !gameState.nameConfirmed) {
+    setStatus(name ? 'Conferma il nome' : 'Inserisci il nome', 'warn');
+    playerNameEl.focus();
+    return;
+  }
   playerNameEl.value = name;
   if (gameState.gameOver) {
     createInitialState(1, false);
+    gameState.lives = 3;
+    updateStats();
   }
   if (!gameState.running) {
     gameState.running = true;
@@ -576,19 +608,34 @@ boardEl.addEventListener('pointercancel', () => {
   pointerStart = null;
 });
 
-playerNameEl.addEventListener('change', () => {
-  const name = playerNameEl.value.trim() || DEFAULT_NAME;
+function updateNameConfirmation() {
+  startBtn.disabled = !gameState.nameConfirmed;
+  confirmNameBtn.classList.toggle('confirmed', gameState.nameConfirmed);
+  confirmNameBtn.setAttribute('aria-pressed', String(gameState.nameConfirmed));
+}
+
+confirmNameBtn.addEventListener('click', () => {
+  const name = playerNameEl.value.trim();
+  if (!name) {
+    setStatus('Inserisci il nome', 'warn');
+    playerNameEl.focus();
+    return;
+  }
+
   playerNameEl.value = name;
+  gameState.nameConfirmed = true;
+  updateNameConfirmation();
   saveProgress();
+  startGame();
+});
+
+playerNameEl.addEventListener('input', () => {
+  gameState.nameConfirmed = false;
+  updateNameConfirmation();
 });
 
 startBtn.addEventListener('click', startGame);
 pauseBtn.addEventListener('click', togglePause);
-resetBtn.addEventListener('click', () => {
-  localStorage.removeItem(STORAGE_KEY);
-  resetGame();
-  render();
-});
 audioToggleBtn.addEventListener('click', toggleAudio);
 
 buildBoardCells();
