@@ -6,7 +6,7 @@ const DEFAULT_NAME = 'Player';
 const levelPresets = [
   {
     name: 'Classic Grid',
-    speed: 170,
+    speed: 700,
     accent: '#6ef7a2',
     background: '#0b1d14',
     wallChance: 0,
@@ -14,7 +14,7 @@ const levelPresets = [
   },
   {
     name: 'Night Forest',
-    speed: 145,
+    speed: 210,
     accent: '#9affb0',
     background: '#0f1a13',
     wallChance: 2,
@@ -22,7 +22,7 @@ const levelPresets = [
   },
   {
     name: 'Retro Maze',
-    speed: 120,
+    speed: 180,
     accent: '#c3ff99',
     background: '#142216',
     wallChance: 5,
@@ -30,7 +30,7 @@ const levelPresets = [
   },
   {
     name: 'Signal Rush',
-    speed: 100,
+    speed: 155,
     accent: '#d7ffd1',
     background: '#0b1e1c',
     wallChance: 7,
@@ -389,6 +389,7 @@ function startGame() {
   if (!gameState.running) {
     gameState.running = true;
     gameState.paused = false;
+    gameState.lastTime = performance.now();
     setStatus('Gioco attivo');
     playTone('start');
     startMusic();
