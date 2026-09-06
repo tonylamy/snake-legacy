@@ -267,6 +267,20 @@ function setDirection(next) {
   }
 }
 
+function setDirectionFromPosition(clientX, clientY) {
+  const boardRect = boardEl.getBoundingClientRect();
+  const centerX = boardRect.left + boardRect.width / 2;
+  const centerY = boardRect.top + boardRect.height / 2;
+  const deltaX = clientX - centerX;
+  const deltaY = clientY - centerY;
+
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    setDirection(deltaX > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
+  } else {
+    setDirection(deltaY > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
+  }
+}
+
 function advanceGame() {
   if (!gameState.running || gameState.paused) return;
 
@@ -559,6 +573,10 @@ boardEl.addEventListener('touchend', (event) => {
     setDirection(deltaY > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
   }
 }, { passive: true });
+
+boardEl.addEventListener('pointerup', (event) => {
+  setDirectionFromPosition(event.clientX, event.clientY);
+});
 
 playerNameEl.addEventListener('change', () => {
   const name = playerNameEl.value.trim() || DEFAULT_NAME;
