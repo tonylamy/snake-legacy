@@ -6,7 +6,7 @@ const DEFAULT_NAME = 'Player';
 const levelPresets = [
   {
     name: 'Classic Grid',
-    speed: 700,
+    speed: 420,
     accent: '#6ef7a2',
     background: '#0b1d14',
     wallChance: 0,
@@ -48,6 +48,7 @@ const gameState = {
   bestScore: 0,
   running: false,
   paused: false,
+  gameOver: false,
   lastTime: 0,
   tickDelay: 170,
   audioEnabled: true,
@@ -212,8 +213,8 @@ function generateWalls(levelIndex) {
 
 function createInitialState(levelNumber = 1, preserveScore = false) {
   const preset = levelPresets[(levelNumber - 1) % levelPresets.length];
-  const startX = 7;
-  const startY = 9;
+  const startX = 8;
+  const startY = 8;
   const snake = [
     { x: startX, y: startY },
     { x: startX - 1, y: startY },
@@ -229,7 +230,8 @@ function createInitialState(levelNumber = 1, preserveScore = false) {
   }
   gameState.running = false;
   gameState.paused = false;
-  gameState.tickDelay = preset.speed;
+  gameState.gameOver = false;
+  gameState.tickDelay = Math.max(120, 420 - (levelNumber - 1) * 35);
   gameState.walls = generateWalls(levelNumber - 1);
   spawnFood();
   updateStats();
@@ -325,6 +327,7 @@ function finishGame() {
   const playerName = playerNameEl.value.trim() || DEFAULT_NAME;
   gameState.running = false;
   gameState.paused = false;
+  gameState.gameOver = true;
   stopMusic();
   addLeaderboardEntry(playerName, gameState.score);
   setStatus('Game Over', 'danger');
@@ -386,6 +389,9 @@ function render() {
 function startGame() {
   const name = playerNameEl.value.trim() || DEFAULT_NAME;
   playerNameEl.value = name;
+  if (gameState.gameOver) {
+    createInitialState(1, false);
+  }
   if (!gameState.running) {
     gameState.running = true;
     gameState.paused = false;
