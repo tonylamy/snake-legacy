@@ -69,7 +69,7 @@ const startBtn = document.getElementById('startBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const resetBtn = document.getElementById('resetBtn');
 const audioToggleBtn = document.getElementById('audioToggle');
-let touchStart = null;
+let pointerStart = null;
 let audioContext = null;
 let musicTimer = null;
 let musicStep = 0;
@@ -552,30 +552,28 @@ document.querySelectorAll('[data-direction]').forEach(button => {
   });
 });
 
-boardEl.addEventListener('touchstart', (event) => {
-  const touch = event.changedTouches[0];
-  touchStart = { x: touch.clientX, y: touch.clientY };
-}, { passive: true });
+boardEl.addEventListener('pointerdown', (event) => {
+  pointerStart = { x: event.clientX, y: event.clientY };
+});
 
-boardEl.addEventListener('touchend', (event) => {
-  if (!touchStart) return;
+boardEl.addEventListener('pointerup', (event) => {
+  if (!pointerStart) return;
 
-  const touch = event.changedTouches[0];
-  const deltaX = touch.clientX - touchStart.x;
-  const deltaY = touch.clientY - touchStart.y;
-  touchStart = null;
+  const deltaX = event.clientX - pointerStart.x;
+  const deltaY = event.clientY - pointerStart.y;
+  pointerStart = null;
 
-  if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 24) return;
-
-  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+  if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 24) {
+    setDirectionFromPosition(event.clientX, event.clientY);
+  } else if (Math.abs(deltaX) > Math.abs(deltaY)) {
     setDirection(deltaX > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
   } else {
     setDirection(deltaY > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
   }
-}, { passive: true });
+});
 
-boardEl.addEventListener('pointerup', (event) => {
-  setDirectionFromPosition(event.clientX, event.clientY);
+boardEl.addEventListener('pointercancel', () => {
+  pointerStart = null;
 });
 
 playerNameEl.addEventListener('change', () => {
