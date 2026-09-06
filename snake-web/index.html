@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Legacy</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">ARCADE</p>
+          <h1>Snake Legacy</h1>
+        </div>
+        <button id="audioToggle" class="small-button" type="button" aria-label="Audio on/off">🔊</button>
+      </header>
+
+      <main class="game-layout">
+        <aside class="panel sidebar">
+          <div class="player-box">
+            <label for="playerName">Nome giocatore</label>
+            <input id="playerName" type="text" maxlength="12" value="Player" placeholder="Inserisci il tuo nome" />
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat">
+              <span>Livello</span>
+              <strong id="levelValue">1</strong>
+            </div>
+            <div class="stat">
+              <span>Punteggio</span>
+              <strong id="scoreValue">0</strong>
+            </div>
+            <div class="stat">
+              <span>Best</span>
+              <strong id="bestValue">0</strong>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button id="startBtn" class="primary-button" type="button">Gioca</button>
+            <button id="pauseBtn" class="secondary-button" type="button">Pausa</button>
+            <button id="resetBtn" class="ghost-button" type="button">Reset salvataggio</button>
+          </div>
+
+          <div class="leaderboard">
+            <h2>Classifica</h2>
+            <ol id="leaderboardList"></ol>
+          </div>
+        </aside>
+
+        <section class="panel board-panel">
+          <div class="board-header">
+            <div>
+              <p class="eyebrow" id="levelName">Livello 1 · Neon City</p>
+            </div>
+            <div class="pill" id="statusBadge">Pronto</div>
+          </div>
+
+          <div id="gameBoard" class="game-board" aria-label="Campo di gioco Snake"></div>
+
+          <div class="touch-controls" aria-label="Controlli touch">
+            <button type="button" data-direction="up">↑</button>
+            <div class="touch-middle-row">
+              <button type="button" data-direction="left">←</button>
+              <button type="button" data-direction="down">↓</button>
+              <button type="button" data-direction="right">→</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>

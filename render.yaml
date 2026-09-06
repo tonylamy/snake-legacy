@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: snake-legacy
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ./snake-web
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
